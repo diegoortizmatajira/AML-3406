@@ -1,4 +1,4 @@
- <!--  
+<!--  
 <!DOCTYPE html>
 <html>
   <head>
@@ -12,50 +12,85 @@
 </html>
 -->
 
-
 {% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>FaceTracker</title>
-        <link href="{% static 'EMOTIONS/styles.css' %}" rel="stylesheet">
-        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-{% block script %}
-{% endblock %}
-    </head>
-    <body>
-        
-            <nav class="navbar navbar-expand-md navbar navbar-light fixed-top" id="myNavbar">
-                <a class="navbar-brand" href="#"><img src="{% static 'EMOTIONS/images/icon.png' %}" width="33px" height="45px">
-                    Face Tracker</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-                </button>
+  <head>
+    <title>FaceTracker</title>
+    <link href="{% static 'EMOTIONS/styles.css' %}" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    {% block script %} {% endblock %}
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar navbar-light" id="myNavbar">
+      <a class="navbar-brand" href="#"
+        ><img
+          src="{% static 'EMOTIONS/images/icon.png' %}"
+          width="33px"
+          height="45px"
+        />
+        Face Tracker</a
+      >
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                  <ul class="navbar-nav">
-                    <li class="nav-item">
-                      <a class="nav-link" id="get_emotions" href="{%url 'get_emotions'%}"> <i class="fa fa-video-camera" aria-hidden="true"></i> Live detection<span class="sr-only">(current)</span></a>
-                    </li>
-                    
-                    <li class="nav-item">
-                        <a class="nav-link" href=" " id="ImageDetection"><i class="fa fa-camera" aria-hidden="true"></i> Image detection<span class="sr-only">(current)</span></a>
-                      </li>
-                    
-                  </ul>
-                </div>
-              </nav>
-        
-        {% block body %}
-        {% endblock %}
-    </body>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" id="get_emotions" href="{%url 'get_emotions'%}">
+              <i class="fa fa-video-camera" aria-hidden="true"></i> Live
+              detection<span class="sr-only">(current)</span></a
+            >
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href=" " id="ImageDetection"
+              ><i class="fa fa-camera" aria-hidden="true"></i> Image
+              detection<span class="sr-only">(current)</span></a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    {% block body %} {% endblock %}
+  </body>
 </html>
