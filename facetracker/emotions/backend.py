@@ -3,13 +3,15 @@ import cv2
 import numpy as np
 import base64
 import random
+import pprint
 
 
 class Backend:
 
     def __init__(self):
         self.path_hubconfig = "./emotions/yolov5"
-        self.path_weightfile = "emotions/yolov5/yolov5s.pt"  # or any custom trained model
+        # self.path_weightfile = "emotions/yolov5/yolov5s.pt"  # or any custom trained model
+        self.path_weightfile = "emotions/best.pt"  # or any custom trained model
 
         self.model = torch.hub.load(self.path_hubconfig,
                                     'custom',
@@ -23,6 +25,7 @@ class Backend:
     def get_frame(self):
         image = self.get_image_frame()
         results = self.model(image, size=640)
+        pprint.pprint(results, depth=1)
         #frame_flip = cv2.flip(results, 1)
         _, jpeg = cv2.imencode('.jpg', np.squeeze(results.render(0.5)))
         return jpeg.tobytes()
