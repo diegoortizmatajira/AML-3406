@@ -4,28 +4,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js"></script>
     <script type="text/javascript">
 
-    function GenerateData(){
-        return {
-            ImageBase64: "BA1135DDA4645",
-            ImageType: "jpg",
-            Detail:"These are the details ["+Math.random()*1000+"]"
-        }
-    }
-
     function ViewModel() {
         var self = this; 
         self.ImageBase64 = ko.observable();
         self.ImageType = ko.observable();  
         self.ImageSrcName= ko.computed(function () {
-            return self.ImageType() + 'base64' + self.ImageBase64();
+            return 'data:' + self.ImageType() + 'base64,' + self.ImageBase64();
         });
         self.Detail = ko.observable();
         self.Update = function () {
-            $.ajax("/echo/json/", {
+            $.ajax("/emotions/camera_endpoint", {
                 type: "GET",
                 dataType: 'json',
                 success: function(allData) {        
-                    allData = GenerateData();
                     self.ImageBase64(allData.ImageBase64);
                     self.ImageType(allData.ImageType);
                     self.Detail(allData.Detail)
@@ -35,7 +26,7 @@
     }
     $(document).ready(function(){
         var dataModel = new ViewModel();
-        window.setInterval(dataModel.Update, 1000);
+        window.setInterval(dataModel.Update, 500);
         ko.applyBindings(dataModel);
     });
 
