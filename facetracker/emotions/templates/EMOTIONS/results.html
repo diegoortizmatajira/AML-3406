@@ -1,0 +1,57 @@
+{% extends "EMOTIONS/home.html" %}
+{% load static %}
+{% block script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js"></script>
+    <script type="text/javascript">
+
+    function GenerateData(){
+        return {
+            ImageBase64: "BA1135DDA4645",
+            ImageType: "jpg",
+            Detail:"These are the details ["+Math.random()*1000+"]"
+        }
+    }
+
+    function ViewModel() {
+        var self = this; 
+        self.ImageBase64 = ko.observable();
+        self.ImageType = ko.observable();  
+        self.ImageSrcName= ko.computed(function () {
+            return self.ImageType() + 'base64' + self.ImageBase64();
+        });
+        self.Detail = ko.observable();
+        self.Update = function () {
+            $.ajax("/echo/json/", {
+                type: "GET",
+                dataType: 'json',
+                success: function(allData) {        
+                    allData = GenerateData();
+                    self.ImageBase64(allData.ImageBase64);
+                    self.ImageType(allData.ImageType);
+                    self.Detail(allData.Detail)
+                }
+            }); 
+        }
+    }
+    $(document).ready(function(){
+        var dataModel = new ViewModel();
+        window.setInterval(dataModel.Update, 1000);
+        ko.applyBindings(dataModel);
+    });
+
+    </script>
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <img data-bind="attr:{src:ImageSrcName}" style='height: 100%; width: 100%; object-fit: contain'/>
+        </div>
+        <div class="col-sm">
+            <textarea data-bind="value:Detail" style='height: 100%; width: 100%; object-fit: contain'>Here is the json</textarea>
+        </div>
+    </div>
+</div>
+
+    
+{% endblock %}
