@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import base64
 import random
-import pprint
+from pprint import pprint
 
 
 class Backend:
@@ -22,22 +22,13 @@ class Backend:
         raise NotImplementedError()
 
     #This function is used in views
-    def get_frame(self):
+    def get_response(self):
         image = self.get_image_frame()
         results = self.model(image, size=640)
-        pprint.pprint(results, depth=1)
-        #frame_flip = cv2.flip(results, 1)
         _, jpeg = cv2.imencode('.jpg', np.squeeze(results.render(0.5)))
-        return jpeg.tobytes()
-
-    def get_base64_frame(self):
-        bytes = self.get_frame()
-        return base64.b64encode(bytes).decode("utf-8") 
-
-
-    def get_response(self):
+        bytes = jpeg.tobytes()
         return {
-            "ImageBase64": self.get_base64_frame(),
+            "ImageBase64": base64.b64encode(bytes).decode("utf-8"),
             "ImageType": "image/jpeg;",
-            "Detail": f"These are the details [{random.randint(1,1000)}]"
+            "Detail": results.pandas().xyxy[0].to_json(orient="records")
         }
