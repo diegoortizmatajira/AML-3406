@@ -1,0 +1,29 @@
+{% extends "home.html" %} {% load static %} {% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js"></script>
+<script src="{% static 'endpoint.js' %}"></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    var dataModel = new ViewModel("/detection/camera_endpoint");
+    window.setInterval(dataModel.Update, 300);
+    ko.applyBindings(dataModel);
+  });
+</script>
+{% endblock %} {% block body %}
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <img
+        data-bind="attr:{src:ImageSrcName}"
+        style="height: 100%; width: 100%; object-fit: contain"
+      />
+    </div>
+    <div class="col-sm">
+      <textarea
+        data-bind="value:Detail"
+        style="height: 100%; width: 100%; object-fit: contain"
+      />
+    </div>
+  </div>
+</div>
+
+{% endblock %}

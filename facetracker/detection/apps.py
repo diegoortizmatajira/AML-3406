@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class EmotionsConfig(AppConfig):
+class DetectionConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'emotions'
+    name = 'detection'

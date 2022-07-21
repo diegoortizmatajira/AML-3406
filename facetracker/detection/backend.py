@@ -9,8 +9,8 @@ import pandas as pd
 class Backend:
 
     def __init__(self):
-        self.path_hubconfig = "./emotions/yolov5"
-        self.path_weightfile = "emotions/best.pt"  # or any custom trained model
+        self.path_hubconfig = "./detection/yolov5"
+        self.path_weightfile = "detection/best.pt"  # or any custom trained model
 
         self.model = torch.hub.load(self.path_hubconfig,
                                     'custom',
