@@ -4,7 +4,8 @@
 <script type="text/javascript">
   $(document).ready(function () {
     var dataModel = new ViewModel("/detection/picture_endpoint");
-    window.setInterval(dataModel.Update, 300);
+    // window.setInterval(dataModel.Update, 300);
+    dataModel.Update();
     ko.applyBindings(dataModel);
   });
 </script>
