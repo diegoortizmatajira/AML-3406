@@ -10,7 +10,7 @@
     });
     self.Detail = ko.observable();
     self.Update = function () {
-      $.ajax("/emotions/camera_endpoint", {
+      $.ajax("/detection/camera_endpoint", {
         type: "GET",
         dataType: "json",
         success: function (allData) {
@@ -23,7 +23,7 @@
   }
   $(document).ready(function () {
     var dataModel = new ViewModel();
-    window.setInterval(dataModel.Update, 500);
+    window.setInterval(dataModel.Update, 200);
     ko.applyBindings(dataModel);
   });
 </script>
