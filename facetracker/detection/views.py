@@ -23,3 +23,16 @@ def camera_endpoint(_):
 
 def picture_endpoint(_):
     return JsonResponse(picture_module.instance.get_response())
+    
+def picture_upload(request):
+    if request.method == 'POST':
+        form = UploadBookForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponse('The file is saved')
+    else:
+        form = UploadBookForm()
+        context = {
+            'form':form,
+        }
+    return render(request, 'books_website/UploadBook.html', context)

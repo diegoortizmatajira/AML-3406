@@ -23,13 +23,22 @@ class Backend:
     def process_dataframe(self, dataframe: pd.DataFrame):
         clean_df: pd.DataFrame = dataframe[['confidence', 'class', 'name']]
         results: dict = clean_df.to_dict('records')
-        summary_df: pd.DataFrame = clean_df.groupby(['class','name']).size().reset_index(name='count')
-        summary = summary_df.to_dict('records') 
+        summary_df: pd.DataFrame = clean_df.groupby(
+            ['class', 'name']).size().reset_index(name='count')
+        summary = summary_df.to_dict('records')
         return json.dumps({'results': results, 'summary': summary})
 
     #This function is used in views
     def get_response(self):
         image = self.get_image_frame()
+        print(type(image))
+        if image is None :
+            return {
+                "ImageBase64": None,
+                "ImageType": None,
+                "Detail": {}
+            }
+
         results = self.model(image, size=640)
         _, jpeg = cv2.imencode('.jpg', np.squeeze(results.render(0.5)))
         bytes = jpeg.tobytes()
