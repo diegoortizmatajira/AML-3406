@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <title>FaceTracker</title>
-    <link href="{% static 'EMOTIONS/styles.css' %}" rel="stylesheet" />
+    <link href="{% static 'styles.css' %}" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
@@ -36,7 +36,7 @@
     <nav class="navbar navbar-expand-md navbar navbar-light" id="myNavbar">
       <a class="navbar-brand" href="#"
         ><img
-          src="{% static 'EMOTIONS/images/icon.png' %}"
+          src="{% static 'images/icon.png' %}"
           width="33px"
           height="45px"
         />
@@ -57,7 +57,7 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" id="get_emotions" href="{%url 'get_emotions'%}">
+            <a class="nav-link" id="results" href="{%url 'results'%}">
               <i class="fa fa-video-camera" aria-hidden="true"></i> Live
               detection<span class="sr-only">(current)</span></a
             >
