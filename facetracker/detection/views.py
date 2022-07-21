@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from . import camera
+from . import camera as camera_module , picture as picture_module
 
 
 # Create your views here.
@@ -11,12 +11,15 @@ def index(request):
 
 #Every time you call the phone and laptop camera method gets frame
 #More info found in camera.py
-def get_emotions(request):
+
+def camera(request):
     return render(request, 'camera.html')
 
-
-def results(request):
-    return render(request, 'results.html')
+def picture(request):
+    return render(request, 'picture.html')
 
 def camera_endpoint(_):
-    return JsonResponse(camera.instance.get_response())
+    return JsonResponse(camera_module.instance.get_response())
+
+def picture_endpoint(_):
+    return JsonResponse(picture_module.instance.get_response())

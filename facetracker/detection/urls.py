@@ -6,6 +6,8 @@ urlpatterns = [
     #display both cameras
     path('', views.index, name='index'),
     #access the laptop camera
-    path('results', views.results, name='results'),
+    path('camera', views.camera, name='camera'),
+    path('picture', views.picture, name='picture'),
     path('camera_endpoint', views.camera_endpoint, name='camera_endpoint'),
+    path('picture_endpoint', views.picture_endpoint, name='picture_endpoint'),
 ]
