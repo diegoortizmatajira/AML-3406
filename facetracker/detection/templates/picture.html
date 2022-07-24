@@ -12,17 +12,30 @@
 {% endblock %} {% block body %}
 <div class="container">
   <div class="row">
-    <div class="col-sm">
-      <img
-        data-bind="attr:{src:ImageSrcName}"
-        style="height: 100%; width: 100%; object-fit: contain"
-      />
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">Processed Image</div>
+        <img
+          class="card-img-top"
+          data-bind="attr:{src:ImageSrcName}"
+          style="height: 100%; width: 100%; object-fit: contain"
+        />
+        <div class="card-body">
+          <h5 class="card-title">Uploaded picture</h5>
+          <p class="card-text">This is the content</p>
+        </div>
+      </div>
     </div>
-    <div class="col-sm">
-      <textarea
-        data-bind="value:Detail"
-        style="height: 100%; width: 100%; object-fit: contain"
-      />
+    <div class="col-sm-4">
+      <div class="card" style="height: 100%; width: 100%; object-fit: contain">
+        <div class="card-header">Results</div>
+        <div class="card-body">
+          <textarea
+            data-bind="value:Detail"
+            style="height: 100%; width: 100%; object-fit: contain"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </div>
