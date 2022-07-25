@@ -31,13 +31,8 @@ class Backend:
     #This function is used in views
     def get_response(self):
         image = self.get_image_frame()
-        print(type(image))
-        if image is None :
-            return {
-                "ImageBase64": None,
-                "ImageType": None,
-                "Detail": {}
-            }
+        if image is None:
+            return {"ImageBase64": None, "ImageType": None, "Detail": {}}
 
         results = self.model(image, size=640)
         _, jpeg = cv2.imencode('.jpg', np.squeeze(results.render(0.5)))

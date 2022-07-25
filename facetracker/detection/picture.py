@@ -8,7 +8,10 @@ class UploadedPicture(Backend):
     def __init__(self):
         Backend.__init__(self)
         content = Image.open("detection/static/images/sample.jpg")
-        self.picture = np.asarray(content)
+        width, height = content.size
+        factor = 640 / width
+        resized_content = content.resize((int(width * factor), int(height * factor)))
+        self.picture = np.asarray(resized_content)
 
     def get_image_frame(self):
         return self.picture
