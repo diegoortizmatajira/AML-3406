@@ -6,7 +6,7 @@ class VideoCamera(Backend):
 
     def __init__(self):
         Backend.__init__(self)
-        self.video = cv2.VideoCapture(2)
+        self.video = cv2.VideoCapture(0)
 
     def get_image_frame(self):
         _, image = self.video.read()
