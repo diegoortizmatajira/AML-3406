@@ -21,8 +21,14 @@
           style="height: 100%; width: 100%; object-fit: contain"
         />
         <div class="card-body">
-          <h5 class="card-title">Uploaded picture</h5>
-          <p class="card-text">This is the content</p>
+          <h5 class="card-title">Upload a new picture</h5>
+          <div class="card-text">
+            <form action="{% url "picture_upload" %}" method="POST" name = "form" enctype = "multipart/form-data">
+                {% csrf_token %}
+                <input type="file" name="picture">
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
+          </div>
         </div>
       </div>
     </div>

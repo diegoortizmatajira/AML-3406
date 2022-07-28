@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from . import camera as camera_module , picture as picture_module
+from . import camera as camera_module
+from . import picture as picture_module
+from . import picture_upload as picture_upload_module
+from PIL import Image
 
 
 # Create your views here.
@@ -12,27 +15,30 @@ def index(request):
 #Every time you call the phone and laptop camera method gets frame
 #More info found in camera.py
 
+
 def camera(request):
     return render(request, 'camera.html')
+
 
 def picture(request):
     return render(request, 'picture.html')
 
+
 def camera_endpoint(_):
     return JsonResponse(camera_module.instance.get_response())
 
+
 def picture_endpoint(_):
     return JsonResponse(picture_module.instance.get_response())
-    
+
+
 def picture_upload(request):
     if request.method == 'POST':
-        form = UploadBookForm(request.POST,request.FILES)
+        form = picture_upload_module.PictureForm(request.POST, request.FILES)
+        print(form.is_valid())
         if form.is_valid():
-            form.save()
-            return HttpResponse('The file is saved')
-    else:
-        form = UploadBookForm()
-        context = {
-            'form':form,
-        }
-    return render(request, 'books_website/UploadBook.html', context)
+            picture_data = Image.open(form.cleaned_data["picture"])
+            print(picture_data)
+            picture_module.instance.set_image(picture_data)
+
+    return render(request, 'picture.html')
