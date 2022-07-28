@@ -35,10 +35,7 @@ def picture_endpoint(_):
 def picture_upload(request):
     if request.method == 'POST':
         form = picture_upload_module.PictureForm(request.POST, request.FILES)
-        print(form.is_valid())
         if form.is_valid():
             picture_data = Image.open(form.cleaned_data["picture"])
-            print(picture_data)
             picture_module.instance.set_image(picture_data)
-
     return render(request, 'picture.html')
