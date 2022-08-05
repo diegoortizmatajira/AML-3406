@@ -11,6 +11,7 @@ class UploadedPicture(Backend):
         self.set_image(image_data)
 
     def get_image_frame(self):
+        self.reset_history_df()
         return self.picture
 
     def set_image(self, image_data):

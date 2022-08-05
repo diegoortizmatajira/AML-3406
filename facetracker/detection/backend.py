@@ -4,6 +4,9 @@ import cv2
 import numpy as np
 import base64
 import pandas as pd
+from datetime import datetime
+from matplotlib import pyplot as plt
+from io import BytesIO
 
 
 class Backend:
@@ -11,22 +14,70 @@ class Backend:
     def __init__(self):
         self.path_hubconfig = "./detection/yolov5"
         self.path_weightfile = "detection/best.pt"  # or any custom trained model
-
         self.model = torch.hub.load(self.path_hubconfig,
                                     'custom',
                                     path=self.path_weightfile,
                                     source='local')
+        self.keep_history = True
+        self.history_df = None
+        self.initialize_history_df()
 
-    def get_image_frame():
+    def get_image_frame(self):
         raise NotImplementedError()
 
+    def initialize_history_df(self):
+        self.history_df = pd.DataFrame({
+            'timestamp': [],
+            'class': [],
+            'name': [],
+            'count': [],
+        })
+
+    def reset_history_df(self):
+        self.history_df = self.history_df[0:0]
+
     def process_dataframe(self, dataframe: pd.DataFrame):
+        now = datetime.now()
         clean_df: pd.DataFrame = dataframe[['confidence', 'class', 'name']]
         results: dict = clean_df.to_dict('records')
+        # creates a new summary dataframe by grouping and counting per class
         summary_df: pd.DataFrame = clean_df.groupby(
             ['class', 'name']).size().reset_index(name='count')
+        # adds timestamp to the dataframe
+        summary_df['timestamp'] = now.strftime("%Y-%m-%dT%H:%M:%S.%f%z")
+        # if result_count > 0:
+        #     summary_df.div(result_count)
         summary = summary_df.to_dict('records')
-        return json.dumps({'results': results, 'summary': summary})
+        # adds the current frame results to the history_df
+        self.history_df = pd.concat([self.history_df, summary_df])
+        history = self.history_df.to_dict('records')
+
+        json_content = json.dumps({
+            'results': results,
+            'summary': summary,
+            "history": history,
+        })
+        return json_content
+
+    def generate_historic_chart(self):
+        if len(self.history_df)==0:
+            return None
+        df = self.history_df.drop(['class'], axis=1)
+        gdf = df.groupby(['timestamp', 'name']).sum('count')
+        gdf = gdf['count'].unstack()
+        # Normalize the values to sum 1.0
+        gdf = gdf.divide(gdf.sum(axis=1), axis=0)
+        fig = plt.figure(figsize=(8, 6))
+        gdf.plot.area(stacked=True)
+        fig.canvas.draw()
+        bytes_io = BytesIO()
+        plt.savefig(bytes_io)
+        buf = bytes_io.getvalue()
+        return buf
+
+    def buffer_to_base64(self, bytes):
+        return None if bytes == None else base64.b64encode(bytes).decode(
+            "utf-8")
 
     #This function is used in views
     def get_response(self):
@@ -36,10 +87,15 @@ class Backend:
 
         results = self.model(image, size=640)
         _, jpeg = cv2.imencode('.jpg', np.squeeze(results.render(0.5)))
-        bytes = jpeg.tobytes()
+
+        # Gets the results to send to the frontend
+        image_frame_base64 = self.buffer_to_base64(jpeg.tobytes())
         detail = self.process_dataframe(results.pandas().xyxy[0])
+        historic_chart_base64 = self.buffer_to_base64(
+            self.generate_historic_chart())
         return {
-            "ImageBase64": base64.b64encode(bytes).decode("utf-8"),
+            "ImageBase64": image_frame_base64,
             "ImageType": "image/jpeg;",
-            "Detail": detail
+            "Detail": detail,
+            "HistoricChartBase64": historic_chart_base64,
         }
