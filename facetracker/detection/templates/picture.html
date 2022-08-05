@@ -22,10 +22,15 @@
         <div class="card-body">
           <h5 class="card-title">Upload a new picture</h5>
           <div class="card-text">
-            <form action="{% url "picture_upload" %}" method="POST" name = "form" enctype = "multipart/form-data">
-                {% csrf_token %}
-                <input type="file" name="picture">
-                <button type="submit" class="btn btn-primary">Upload</button>
+            <form
+              action="{% url 'picture_upload' %}"
+              method="POST"
+              name="form"
+              enctype="multipart/form-data"
+            >
+              {% csrf_token %}
+              <input type="file" name="picture" />
+              <button type="submit" class="btn btn-primary">Upload</button>
             </form>
           </div>
         </div>
@@ -34,12 +39,19 @@
     <div class="col-sm-4">
       <div class="card">
         <div class="card-header">Results</div>
-        <img
-          class="card-img-top"
-          data-bind="attr:{src:HistoricChartSrcName}"
-          style="height: 100%; width: 100%; object-fit: contain"
-        />
         <div class="card-body">
+          <div class="row">
+            <img
+              data-bind="attr:{src:HistoricChartSrcName}"
+              style="height: 100%; width: 100%; object-fit: contain"
+            />
+          </div>
+          <div class="row">
+            <img
+              data-bind="attr:{src:PieChartSrcName}"
+              style="height: 100%; width: 100%; object-fit: contain"
+            />
+          </div>
         </div>
       </div>
     </div>
