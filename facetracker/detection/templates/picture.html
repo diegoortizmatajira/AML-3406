@@ -4,7 +4,6 @@
 <script type="text/javascript">
   $(document).ready(function () {
     var dataModel = new ViewModel("/detection/picture_endpoint");
-    // window.setInterval(dataModel.Update, 300);
     dataModel.Update();
     ko.applyBindings(dataModel);
   });
@@ -33,13 +32,14 @@
       </div>
     </div>
     <div class="col-sm-4">
-      <div class="card" style="height: 100%; width: 100%; object-fit: contain">
+      <div class="card">
         <div class="card-header">Results</div>
+        <img
+          class="card-img-top"
+          data-bind="attr:{src:HistoricChartSrcName}"
+          style="height: 100%; width: 100%; object-fit: contain"
+        />
         <div class="card-body">
-          <textarea
-            data-bind="value:Detail"
-            style="height: 100%; width: 100%; object-fit: contain"
-          />
         </div>
       </div>
     </div>
