@@ -2,8 +2,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js"></script>
 <script src="{% static 'endpoint.js' %}"></script>
 <script type="text/javascript">
+  let dataModel = {};
   $(document).ready(function () {
-    var dataModel = new ViewModel("/detection/picture_endpoint");
+    dataModel = new ViewModel("picture_endpoint");
     dataModel.Update();
     ko.applyBindings(dataModel);
   });
@@ -40,6 +41,16 @@
       <div class="card">
         <div class="card-header">Results</div>
         <div class="card-body">
+          <div class="row">
+            <div class="container">
+              <button
+                class="btn btn-secondary btn-block"
+                onclick="dataModel.Update()"
+              >
+                Refresh Analytics
+              </button>
+            </div>
+          </div>
           <div class="row">
             <img
               data-bind="attr:{src:HistoricChartSrcName}"

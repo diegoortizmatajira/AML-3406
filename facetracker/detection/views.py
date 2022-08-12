@@ -9,7 +9,7 @@ from PIL import Image
 # Create your views here.
 #Display the 2 videos
 def index(request):
-    return render(request, 'home.html')
+    return render(request, 'landing.html')
 
 
 #Every time you call the phone and laptop camera method gets frame
@@ -25,11 +25,11 @@ def picture(request):
 
 
 def camera_endpoint(_):
-    return JsonResponse(camera_module.instance.get_response())
+    return JsonResponse(camera_module.camera_instance.get_response())
 
 
 def picture_endpoint(_):
-    return JsonResponse(picture_module.instance.get_response())
+    return JsonResponse(picture_module.picture_instance.get_response())
 
 
 def picture_upload(request):
@@ -37,5 +37,5 @@ def picture_upload(request):
         form = picture_upload_module.PictureForm(request.POST, request.FILES)
         if form.is_valid():
             picture_data = Image.open(form.cleaned_data["picture"])
-            picture_module.instance.set_image(picture_data)
+            picture_module.picture_instance.set_image(picture_data)
     return render(request, 'picture.html')

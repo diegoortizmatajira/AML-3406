@@ -17,7 +17,6 @@ class Backend:
                                     'custom',
                                     path=self.path_weightfile,
                                     source='local')
-        self.keep_history = True
         self.history_df = None
         self.initialize_history_df()
 
