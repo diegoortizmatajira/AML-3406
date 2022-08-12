@@ -3,7 +3,7 @@
 <script src="{% static 'endpoint.js' %}"></script>
 <script type="text/javascript">
   $(document).ready(function () {
-    var dataModel = new ViewModel("/detection/camera_endpoint");
+    var dataModel = new ViewModel("camera_endpoint");
     window.setInterval(dataModel.Update, 300);
     ko.applyBindings(dataModel);
   });
@@ -27,12 +27,19 @@
     <div class="col-sm-4">
       <div class="card">
         <div class="card-header">Results</div>
-        <img
-          class="card-img-top"
-          data-bind="attr:{src:HistoricChartSrcName}"
-          style="height: 100%; width: 100%; object-fit: contain"
-        />
         <div class="card-body">
+          <div class="row">
+            <img
+              data-bind="attr:{src:HistoricChartSrcName}"
+              style="height: 100%; width: 100%; object-fit: contain"
+            />
+          </div>
+          <div class="row">
+            <img
+              data-bind="attr:{src:PieChartSrcName}"
+              style="height: 100%; width: 100%; object-fit: contain"
+            />
+          </div>
         </div>
       </div>
     </div>

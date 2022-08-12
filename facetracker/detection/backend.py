@@ -1,4 +1,3 @@
-import json
 import torch
 import cv2
 import numpy as np
@@ -18,7 +17,6 @@ class Backend:
                                     'custom',
                                     path=self.path_weightfile,
                                     source='local')
-        self.keep_history = True
         self.history_df = None
         self.initialize_history_df()
 
@@ -39,28 +37,25 @@ class Backend:
     def process_dataframe(self, dataframe: pd.DataFrame):
         now = datetime.now()
         clean_df: pd.DataFrame = dataframe[['confidence', 'class', 'name']]
-        results: dict = clean_df.to_dict('records')
         # creates a new summary dataframe by grouping and counting per class
         summary_df: pd.DataFrame = clean_df.groupby(
             ['class', 'name']).size().reset_index(name='count')
         # adds timestamp to the dataframe
         summary_df['timestamp'] = now.strftime("%Y-%m-%dT%H:%M:%S.%f%z")
-        # if result_count > 0:
-        #     summary_df.div(result_count)
-        summary = summary_df.to_dict('records')
         # adds the current frame results to the history_df
         self.history_df = pd.concat([self.history_df, summary_df])
-        history = self.history_df.to_dict('records')
 
-        json_content = json.dumps({
-            'results': results,
-            'summary': summary,
-            "history": history,
-        })
-        return json_content
+        # Generates the pie chart for the results
+        fig = plt.figure(figsize=(8, 6))
+        summary_df.groupby(['name']).sum().plot(kind='pie', y='count')
+        fig.canvas.draw()
+        bytes_io = BytesIO()
+        plt.savefig(bytes_io)
+        buf = bytes_io.getvalue()
+        return self.buffer_to_base64(buf)
 
     def generate_historic_chart(self):
-        if len(self.history_df)==0:
+        if len(self.history_df) == 0:
             return None
         df = self.history_df.drop(['class'], axis=1)
         gdf = df.groupby(['timestamp', 'name']).sum('count')
@@ -73,7 +68,7 @@ class Backend:
         bytes_io = BytesIO()
         plt.savefig(bytes_io)
         buf = bytes_io.getvalue()
-        return buf
+        return self.buffer_to_base64(buf)
 
     def buffer_to_base64(self, bytes):
         return None if bytes == None else base64.b64encode(bytes).decode(
@@ -89,13 +84,9 @@ class Backend:
         _, jpeg = cv2.imencode('.jpg', np.squeeze(results.render(0.5)))
 
         # Gets the results to send to the frontend
-        image_frame_base64 = self.buffer_to_base64(jpeg.tobytes())
-        detail = self.process_dataframe(results.pandas().xyxy[0])
-        historic_chart_base64 = self.buffer_to_base64(
-            self.generate_historic_chart())
         return {
-            "ImageBase64": image_frame_base64,
             "ImageType": "image/jpeg;",
-            "Detail": detail,
-            "HistoricChartBase64": historic_chart_base64,
+            "ImageBase64": self.buffer_to_base64(jpeg.tobytes()),
+            "PieChartBase64": self.process_dataframe(results.pandas().xyxy[0]),
+            "HistoricChartBase64": self.generate_historic_chart(),
         }

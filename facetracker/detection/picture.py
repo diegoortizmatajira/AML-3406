@@ -7,11 +7,10 @@ class UploadedPicture(Backend):
 
     def __init__(self):
         Backend.__init__(self)
-        image_data = Image.open("detection/static/images/sample.jpg")
-        self.set_image(image_data)
+        self.picture = None
+        self.set_image(Image.open("detection/static/images/sample.jpg"))
 
     def get_image_frame(self):
-        self.reset_history_df()
         return self.picture
 
     def set_image(self, image_data):
@@ -24,4 +23,4 @@ class UploadedPicture(Backend):
         pass
 
 
-instance = UploadedPicture()
+picture_instance = UploadedPicture()
