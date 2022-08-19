@@ -15,4 +15,5 @@ class VideoCamera(Backend):
     def __del__(self):
         self.video.release()
 
+
 camera_instance = VideoCamera()

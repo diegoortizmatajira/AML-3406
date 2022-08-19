@@ -11,7 +11,7 @@ class UploadedPicture(Backend):
         self.set_image(Image.open("detection/static/images/sample.jpg"))
 
     def get_image_frame(self):
-        return self.picture
+        return self.picture.copy()
 
     def set_image(self, image_data):
         width, height = image_data.size
