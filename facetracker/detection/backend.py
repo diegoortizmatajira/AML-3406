@@ -7,16 +7,17 @@ from datetime import datetime
 from matplotlib import pyplot as plt
 from io import BytesIO
 
+path_hubconfig = "./detection/yolov5"
+path_weightfile = "detection/best.pt"  # or any custom trained model
+model = torch.hub.load(path_hubconfig,
+                       'custom',
+                       path=path_weightfile,
+                       source='local')
+
 
 class Backend:
 
     def __init__(self):
-        self.path_hubconfig = "./detection/yolov5"
-        self.path_weightfile = "detection/best.pt"  # or any custom trained model
-        self.model = torch.hub.load(self.path_hubconfig,
-                                    'custom',
-                                    path=self.path_weightfile,
-                                    source='local')
         self.history_df = None
         self.initialize_history_df()
 
@@ -80,7 +81,7 @@ class Backend:
         if image is None:
             return {"ImageBase64": None, "ImageType": None, "Detail": {}}
 
-        results = self.model(image, size=640)
+        results = model(image, size=640)
         _, jpeg = cv2.imencode('.jpg', np.squeeze(results.render(0.5)))
 
         # Gets the results to send to the frontend
