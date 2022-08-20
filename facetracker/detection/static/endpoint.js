@@ -18,10 +18,13 @@ function ViewModel(url) {
       type: "GET",
       dataType: "json",
       success: function (allData) {
-        self.ImageBase64(allData.ImageBase64);
         self.ImageType(allData.ImageType);
-        self.PieChartBase64(allData.PieChartBase64);
-        self.HistoricChartBase64(allData.HistoricChartBase64);
+        if (allData.ImageBase64)
+          self.ImageBase64(allData.ImageBase64);
+        if (allData.PieChartBase64)
+          self.PieChartBase64(allData.PieChartBase64);
+        if (allData.HistoricChartBase64)
+          self.HistoricChartBase64(allData.HistoricChartBase64);
       },
     });
   };
