@@ -14,6 +14,8 @@ model = torch.hub.load(path_hubconfig,
                        path=path_weightfile,
                        source='local')
 
+LABELS = ['Attentive', 'Distracted', 'Sleepy']
+COLORS= ['green', 'orange', 'blue', 'silver']
 
 class Backend:
 
@@ -41,6 +43,18 @@ class Backend:
         # creates a new summary dataframe by grouping and counting per class
         summary_df: pd.DataFrame = clean_df.groupby(
             ['class', 'name']).size().reset_index(name='count')
+        added_rows = []
+        if len(summary_df) == 0:
+            added_rows.append({'confidence': 0, 'name': 'Unknown', 'count': 1})
+            
+        # adds zero count rows
+        for label in LABELS:
+            temp = summary_df[summary_df['name'] == label]
+            if len(temp) == 0:
+                added_rows.append({'confidence': 0, 'name': label, 'count': 0})
+        temp_df = pd.DataFrame(added_rows)
+        summary_df = pd.concat([summary_df, temp_df])
+
         # adds timestamp to the dataframe
         summary_df['timestamp'] = now.strftime("%Y-%m-%dT%H:%M:%S.%f%z")
         # adds the current frame results to the history_df
@@ -48,7 +62,7 @@ class Backend:
 
         # Generates the pie chart for the results
         fig = plt.figure(figsize=(8, 6))
-        summary_df.groupby(['name']).sum().plot(kind='pie', y='count')
+        summary_df.groupby(['name']).sum().plot(kind='pie', y='count', colors= COLORS)
         fig.canvas.draw()
         bytes_io = BytesIO()
         plt.savefig(bytes_io)
