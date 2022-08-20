@@ -78,7 +78,7 @@ class Backend:
         # Normalize the values to sum 1.0
         gdf = gdf.divide(gdf.sum(axis=1), axis=0)
         fig = plt.figure(figsize=(8, 6))
-        gdf.plot.area(stacked=True)
+        gdf.plot.area(stacked=True, color=COLORS)
         fig.canvas.draw()
         bytes_io = BytesIO()
         plt.savefig(bytes_io)
